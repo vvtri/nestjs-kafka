@@ -41,7 +41,7 @@ const consumerConfig: ConsumerConfig = {
 export class AppModule {}
 ```
 
-To see all available config, see KafkaModuleConfig.
+To see all available config, see `KafkaModuleConfig.`
 
 ### How to sendMessage
 
@@ -53,7 +53,7 @@ export class TaskKafkaProductService {
   constructor(private readonly kafkaProducer: KafkaProducer,) {}
 
   public async sendPushTask(kafkaTaskDto: KafkaTaskDto): Promise<any> {
-     await this.kafkaProducer.send(
+     await this.kafkaProducer.send<KafkaTaskDto>(
       {
         topic: Topic,
         messages: [{ value: kafkaTaskDto }],
