@@ -25,6 +25,7 @@ jobs:
         with:
           node-version: '16'
       - run: yarn install --frozen-lockfile
+      - run: rm -rf dist
       - name: Build Project
         run: tsc
       - name: Config Git
