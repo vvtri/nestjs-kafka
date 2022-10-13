@@ -1,0 +1,40 @@
+name: Publish to NPM
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version of package to be applied
+        required: true
+        type: string
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+
+  publish-to-npm:
+    runs-on: ubuntu-latest
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    needs: ['test']
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - run: yarn install --frozen-lockfile
+      - name: Build Project
+        run: tsc
+      - name: Config Git
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "username@users.noreply.github.com"
+      - name: Authenticate to NPM
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+      - name: Update NPM Version
+        run: npm version ${{ inputs.version }} -m 'Workflow upgrade package version ${{ inputs.version }}'
+      - name: Publish to NPM
+        run: npm publish
+      - run: git push origin master

@@ -1,0 +1,12 @@
+{
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "testRegex": ".test.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "testTimeout": 99999,
+  "setupFilesAfterEnv": [
+    "./setup.ts"
+  ]
+}
