@@ -17,8 +17,7 @@ yarn add @vvtri/nestjs-kafka
 ### Add it to the NestJS app.module.ts
 
 ```ts
-import { KafkaModule } from 'nestjs-kafka';
-import { ConsumerConfig, KafkaConfig, KafkaModuleConfig } from '@vvtri/nestjs-kafka';
+import { KafkaModule, ConsumerConfig, KafkaConfig, KafkaModuleConfig } from '@vvtri/nestjs-kafka';
 
 
 const kafkaConfig: KafkaConfig = {
