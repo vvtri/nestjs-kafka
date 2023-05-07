@@ -1,0 +1,5 @@
+**/migrations
+
+**/i18n/*.generated*
+
+.github
