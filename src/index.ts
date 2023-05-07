@@ -1,9 +1,5 @@
 // KafkaJs
-export {
-  KafkaConfig,
-  ConsumerConfig,
-  ProducerConfig,
-} from 'kafkajs';
+export { KafkaConfig, ConsumerConfig, ProducerConfig } from 'kafkajs';
 export { SchemaRegistryAPIClientArgs } from '@kafkajs/confluent-schema-registry/dist/api';
 
 // Main
