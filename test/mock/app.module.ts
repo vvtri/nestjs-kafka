@@ -5,7 +5,7 @@ import { AppService } from './app.service';
 import { consumerConfig, kafkaConfig, testMockFn } from './config';
 
 @Module({
-  imports: [KafkaModule.forRoot({ kafkaConfig, consumerConfig })],
+  imports: [KafkaModule.forRoot({ kafkaConfig, consumerConfig, })],
   controllers: [AppController],
   providers: [
     AppService,
