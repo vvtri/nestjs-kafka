@@ -2,7 +2,7 @@
 export { KafkaConfig, ConsumerConfig, ProducerConfig } from 'kafkajs';
 export { SchemaRegistryAPIClientArgs } from '@kafkajs/confluent-schema-registry/dist/api';
 
-// Main
+// Main 1
 export * from './data/index';
 export * from './decorators/index.decorator';
 export * from './interfaces/index.interface';
