@@ -8,8 +8,8 @@ import { testMockFn, Topic } from './config';
 export class AppService {
   constructor(
     private kafkaProducer: KafkaProducer,
-    @Inject(testMockFn.TEST_CONSUMER1) private testConsumer1Fn: Function,
-    @Inject(testMockFn.TEST_PRODUCER1) private testProducer1Fn: Function,
+    @Inject('TEST_CONSUMER') private testConsumer1Fn: Function,
+    @Inject('TEST_PRODUCER1') private testProducer1Fn: Function,
   ) {}
 
   @SubscribeTo(Topic, { autoParseByJson: true })

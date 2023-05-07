@@ -1,4 +1,3 @@
-import { SchemaRegistryAPIClientArgs } from '@kafkajs/confluent-schema-registry/dist/api';
 import { ConsumerConfig, KafkaConfig } from 'kafkajs';
 
 export const Topic = 'TEST';
