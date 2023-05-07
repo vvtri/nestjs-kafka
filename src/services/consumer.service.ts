@@ -11,7 +11,8 @@ export class KafkaConsumer implements OnModuleDestroy, OnModuleInit {
     private consumer: Consumer,
     private subscribeInfos: SubscribeInfoType,
     private moduleRef: ModuleRef,
-    private registry?: SchemaRegistry
+    private registry: SchemaRegistry | undefined,
+    private shouldReadFromBeginning: boolean
   ) {}
 
   async onModuleInit() {
@@ -25,7 +26,7 @@ export class KafkaConsumer implements OnModuleDestroy, OnModuleInit {
 
     await this.consumer.subscribe({
       topics: [...this.subscribeInfos.keys()],
-      fromBeginning: false,
+      fromBeginning: this.shouldReadFromBeginning,
     });
 
     await this.consumer.run({
