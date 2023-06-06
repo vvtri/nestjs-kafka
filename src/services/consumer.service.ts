@@ -12,10 +12,21 @@ export class KafkaConsumer implements OnModuleDestroy, OnModuleInit {
     private subscribeInfos: SubscribeInfoType,
     private moduleRef: ModuleRef,
     private registry: SchemaRegistry | undefined,
-    private shouldReadFromBeginning: boolean
+    private shouldReadFromBeginning: boolean,
   ) {}
 
   async onModuleInit() {
+    this.handleSubscribe().catch((error) =>
+      logService.errorWhenSubscribing(error),
+    );
+  }
+
+  async onModuleDestroy() {
+    await this.consumer.disconnect();
+    logService.consumerDisconnected();
+  }
+
+  private async handleSubscribe() {
     await this.consumer.connect();
 
     if (!this.subscribeInfos.size) {
@@ -32,29 +43,29 @@ export class KafkaConsumer implements OnModuleDestroy, OnModuleInit {
     await this.consumer.run({
       eachMessage: async (payload: EachMessagePayload) => {
         const subscribeInfo = this.subscribeInfos.get(
-          payload.topic
+          payload.topic,
         ) as ConsumerHandler;
 
         if (payload.message.value) {
           if (subscribeInfo.autoParseBySchema) {
             if (!this.registry) {
               logService.errorParseBySchemaButSchemaRegistryNotfound(
-                subscribeInfo.topic
+                subscribeInfo.topic,
               );
             } else {
               payload.message.value = await this.registry.decode(
-                payload.message.value
+                payload.message.value,
               );
             }
           } else if (subscribeInfo.autoParseByJson) {
             payload.message.value = await JSON.parse(
-              payload.message.value.toString()
+              payload.message.value.toString(),
             );
           }
         }
 
         const contextInstance = await this.getContextInstance(
-          subscribeInfo.context
+          subscribeInfo.context,
         );
 
         await subscribeInfo.handler.call(contextInstance, payload);
@@ -63,11 +74,6 @@ export class KafkaConsumer implements OnModuleDestroy, OnModuleInit {
 
     logService.subscribeToTopics(this.subscribeInfos.keys());
     logService.consumerListening();
-  }
-
-  async onModuleDestroy() {
-    await this.consumer.disconnect();
-    logService.consumerDisconnected();
   }
 
   private async getContextInstance(context: Function) {
