@@ -15,7 +15,7 @@ export class KafkaModule {
     producerConfig,
     schemaRegistryConfig,
     shouldReadFromBeginning = true,
-    shouldRunConsumerAsync = true,
+    shouldRunConsumerAsync = false,
   }: KafkaModuleConfig): Promise<DynamicModule> {
     const kafka = new Kafka(kafkaConfig);
     const consumer = kafka.consumer(consumerConfig);
