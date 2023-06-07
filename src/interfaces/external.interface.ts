@@ -12,7 +12,8 @@ export interface KafkaModuleConfig {
   consumerConfig: ConsumerConfig;
   producerConfig?: ProducerConfig;
   schemaRegistryConfig?: SchemaRegistryAPIClientArgs;
-  shouldReadFromBeginning?: boolean
+  shouldReadFromBeginning?: boolean;
+  shouldRunConsumerAsync?: boolean;
 }
 
 export interface ProducerOption {

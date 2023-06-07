@@ -3,22 +3,36 @@ import { Consumer, EachMessagePayload } from 'kafkajs';
 import { SubscribeInfoType } from '../data';
 import { SchemaRegistry } from '@kafkajs/confluent-schema-registry';
 import { ModuleRef } from '@nestjs/core';
-import { ConsumerHandler } from '../interfaces/internal.interface';
+import {
+  ConsumerHandler,
+  KafkaConsumerParams,
+} from '../interfaces/internal.interface';
 import { logService } from './log.service';
 
-export class KafkaConsumer implements OnModuleDestroy, OnModuleInit {
-  constructor(
-    private consumer: Consumer,
-    private subscribeInfos: SubscribeInfoType,
-    private moduleRef: ModuleRef,
-    private registry: SchemaRegistry | undefined,
-    private shouldReadFromBeginning: boolean,
-  ) {}
+export class KafkaConsumer
+  implements OnModuleDestroy, OnModuleInit, KafkaConsumerParams
+{
+  consumer: Consumer;
+  subscribeInfos: SubscribeInfoType;
+  moduleRef: ModuleRef;
+  registry: SchemaRegistry | undefined;
+  shouldReadFromBeginning: boolean;
+  shouldRunConsumerAsync: boolean;
+
+  constructor(params: KafkaConsumerParams) {
+    Object.assign(this, params);
+  }
 
   async onModuleInit() {
-    this.handleSubscribe().catch((error) =>
-      logService.errorWhenSubscribing(error),
-    );
+    if (this.shouldRunConsumerAsync) {
+      this.handleSubscribe().catch((error) =>
+        logService.errorWhenSubscribing(error),
+      );
+    } else {
+      await this.handleSubscribe().catch((error) =>
+        logService.errorWhenSubscribing(error),
+      );
+    }
   }
 
   async onModuleDestroy() {

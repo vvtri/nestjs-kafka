@@ -15,6 +15,7 @@ export class KafkaModule {
     producerConfig,
     schemaRegistryConfig,
     shouldReadFromBeginning = true,
+    shouldRunConsumerAsync = true,
   }: KafkaModuleConfig): Promise<DynamicModule> {
     const kafka = new Kafka(kafkaConfig);
     const consumer = kafka.consumer(consumerConfig);
@@ -33,13 +34,14 @@ export class KafkaModule {
           provide: KafkaConsumer,
           inject: [ModuleRef],
           useFactory: (moduleRef: ModuleRef) => {
-            return new KafkaConsumer(
+            return new KafkaConsumer({
               consumer,
               subscribeInfos,
               moduleRef,
               registry,
-              shouldReadFromBeginning
-            );
+              shouldReadFromBeginning,
+              shouldRunConsumerAsync,
+            });
           },
         },
         {
